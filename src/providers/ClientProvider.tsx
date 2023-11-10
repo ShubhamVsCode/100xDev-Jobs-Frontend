@@ -1,12 +1,16 @@
 "use client";
 
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+import { type ThemeProviderProps } from "next-themes/dist/types";
 
-const ClientProvider = ({ children }: { children: React.ReactNode }) => {
+const ClientProvider = ({ children, ...props }: ThemeProviderProps) => {
   return (
     <>
-      <Toaster />
-      {children}
+      <ThemeProvider {...props}>
+        <Toaster />
+        {children}
+      </ThemeProvider>
     </>
   );
 };
