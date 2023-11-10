@@ -6,6 +6,7 @@ import React, { useCallback, useEffect } from "react";
 import { Button, buttonVariants } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { LogOutIcon } from "lucide-react";
+import { Avatar } from "./ui/avatar";
 
 const Navbar = () => {
   const { user, setUser, removeUser } = useUserStore();
@@ -46,6 +47,12 @@ const Navbar = () => {
             className={cn(buttonVariants({ variant: "ghost" }))}
           >
             Dashboard
+          </Link>
+          <Link
+            href="/profile"
+            className={cn(buttonVariants({ variant: "ghost" }))}
+          >
+            Profile
           </Link>
           <Button onClick={logout}>
             <LogOutIcon className="h-4 w-4" />

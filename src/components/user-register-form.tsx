@@ -49,7 +49,7 @@ export default function UserRegisterForm({
 
       setUser(response.user);
 
-      router.replace("/");
+      router.replace("/profile");
 
       toast({
         title: "Registered Successfully",
