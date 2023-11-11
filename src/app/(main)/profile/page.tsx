@@ -13,52 +13,28 @@ import SideBar from "@/components/profile/SideBar";
 import useUserStore from "@/store/user-store";
 import { cn } from "@/lib/utils";
 
-interface AddOn {
-  id: number;
-  checked: boolean;
-  title: string;
-  subtitle: string;
-  price: number;
-}
-
 export type FormItems = {
   name: string;
   email: string;
   username: string;
-  plan: "arcade" | "advanced" | "pro";
-  yearly: boolean;
-  addOns: AddOn[];
+  profilePicture: string;
+  github: string;
+  linkedin: string;
+  youtube: string;
+  twitter: string;
+  portfolio: string;
 };
 
 const initialValues: FormItems = {
   name: "",
   email: "",
   username: "",
-  plan: "arcade",
-  yearly: false,
-  addOns: [
-    {
-      id: 1,
-      checked: true,
-      title: "Online Service",
-      subtitle: "Access to multiple games",
-      price: 1,
-    },
-    {
-      id: 2,
-      checked: false,
-      title: "Large storage",
-      subtitle: "Extra 1TB of cloud save",
-      price: 2,
-    },
-    {
-      id: 3,
-      checked: false,
-      title: "Customizable Profile",
-      subtitle: "Custom theme on your profile",
-      price: 2,
-    },
-  ],
+  profilePicture: "",
+  github: "",
+  linkedin: "",
+  youtube: "",
+  twitter: "",
+  portfolio: "",
 };
 
 export default function ProfilePage() {
