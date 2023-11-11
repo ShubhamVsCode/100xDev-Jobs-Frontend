@@ -9,21 +9,7 @@ type stepProps = FormItems & {
   updateForm: (fieldToUpdate: Partial<FormItems>) => void;
 };
 
-const AddonsForm = ({ addOns, yearly, updateForm }: stepProps) => {
-  function handleCheckboxChange(addOnId: number, checked: boolean) {
-    const updatedAddOns = addOns.map((addOn) => {
-      if (addOn.id === addOnId) {
-        return {
-          ...addOn,
-          checked,
-        };
-      } else {
-        return addOn;
-      }
-    });
-    updateForm({ addOns: updatedAddOns });
-  }
-
+const AddonsForm = ({ updateForm }: stepProps) => {
   return (
     <FormWrapper
       title="Showcase your skills"

@@ -20,6 +20,7 @@ class ApiClient {
   private _getClient(baseURL?: string): AxiosInstance {
     const apiClient = axios.create({
       baseURL: baseURL || process.env.NEXT_PUBLIC_API_URL,
+      withCredentials: true,
     });
     apiClient.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
@@ -27,6 +28,7 @@ class ApiClient {
           const token = localStorage.getItem("token");
           if (token && config.headers) {
             const configHeaders = config.headers;
+            configHeaders["Access-Control-Allow-Origin"] = "*";
             configHeaders.Authorization = `Bearer ${token}`;
           }
         }

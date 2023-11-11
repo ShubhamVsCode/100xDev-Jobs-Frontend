@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ClientProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
