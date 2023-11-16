@@ -1,24 +1,24 @@
 import FormWrapper from "./FormWrapper";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FormItems } from "@/app/(main)/profile/page";
 import { UploadDropzone, Uploader } from "@/utils/uploadthing";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import useUserStore from "@/store/user-store";
+import { UseFormSetValue } from "react-hook-form";
+import { ProfileType } from "@/lib/validations/auth";
 
-type StepProps = FormItems & {
-  updateForm: (fieldToUpdate: Partial<FormItems>) => void;
-  errors: Partial<FormItems>;
+type StepProps = {
+  updateForm: UseFormSetValue<ProfileType>;
 };
 
-const UserInfoForm = ({
-  name,
-  email,
-  username,
-  errors,
-  updateForm,
-}: StepProps) => {
+const UserInfoForm = ({ updateForm }: StepProps) => {
   const [tempProfilePicture, setTempProfilePicture] = useState("");
+  const { user } = useUserStore();
+  if (!user) {
+    return;
+  }
+  const { name, email, username } = user;
 
   return (
     <FormWrapper
@@ -47,7 +47,7 @@ const UserInfoForm = ({
               onClientUploadComplete={(res) => {
                 console.log("Files: ", res);
                 if (res && res?.at(0)?.url) {
-                  updateForm({ profilePicture: res[0].url });
+                  updateForm("picture", res[0].url);
                   setTempProfilePicture(res[0].url);
                 }
               }}
@@ -64,11 +64,11 @@ const UserInfoForm = ({
             name="name"
             id="name"
             value={name}
-            onChange={(e) => updateForm({ name: e.target.value })}
             className="w-full "
             required
+            disabled
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+          {/* {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>} */}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">Email Address</Label>
@@ -79,12 +79,12 @@ const UserInfoForm = ({
             placeholder="e.g. stephenking@lorem.com"
             value={email}
             className="w-full "
-            onChange={(e) => updateForm({ email: e.target.value })}
             required
+            disabled
           />
-          {errors.email && (
+          {/* {errors.email && (
             <p className="text-red-500 text-sm">{errors.email}</p>
-          )}
+          )} */}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="username">Username</Label>
@@ -95,12 +95,12 @@ const UserInfoForm = ({
             placeholder="e.g. +1 234 567 890"
             value={username}
             className="w-full "
-            onChange={(e) => updateForm({ username: e.target.value })}
             required
+            disabled
           />
-          {errors.username && (
+          {/* {errors.username && (
             <p className="text-red-500 text-sm">{errors.username}</p>
-          )}
+          )} */}
         </div>
       </div>
     </FormWrapper>

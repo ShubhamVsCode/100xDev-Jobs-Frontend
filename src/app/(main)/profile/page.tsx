@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useMultiplestepForm } from "@/hooks/useMultiStepForm";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,36 +12,24 @@ import SuccessMessage from "@/components/profile/SuccessMessage";
 import SideBar from "@/components/profile/SideBar";
 import useUserStore from "@/store/user-store";
 import { cn } from "@/lib/utils";
-
-export type FormItems = {
-  name: string;
-  email: string;
-  username: string;
-  profilePicture: string;
-  github: string;
-  linkedin: string;
-  youtube: string;
-  twitter: string;
-  portfolio: string;
-};
-
-const initialValues: FormItems = {
-  name: "",
-  email: "",
-  username: "",
-  profilePicture: "",
-  github: "",
-  linkedin: "",
-  youtube: "",
-  twitter: "",
-  portfolio: "",
-};
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProfileSchema, ProfileType } from "@/lib/validations/auth";
+import { toast } from "@/components/ui/use-toast";
+import ProfileAPI from "@/api/profile";
 
 export default function ProfilePage() {
   const { user } = useUserStore();
 
-  const [formData, setFormData] = useState({ ...initialValues, ...user });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<ProfileType>({
+    resolver: zodResolver(ProfileSchema),
+  });
+
   const {
     previousStep,
     nextStep,
@@ -51,63 +39,43 @@ export default function ProfilePage() {
     steps,
     goTo,
     showSuccessMsg,
-  } = useMultiplestepForm(4);
-
-  function updateForm(fieldToUpdate: Partial<FormItems>) {
-    const { name, email, username } = fieldToUpdate;
-
-    if (name && name.trim().length < 3) {
-      setErrors((prevState) => ({
-        ...prevState,
-        name: "Name should be at least 3 characters long",
-      }));
-    } else if (name && name.trim().length > 15) {
-      setErrors((prevState) => ({
-        ...prevState,
-        name: "Name should be no longer than 15 characters",
-      }));
-    } else {
-      setErrors((prevState) => ({
-        ...prevState,
-        name: "",
-      }));
-    }
-
-    if (email && !/\S+@\S+\.\S+/.test(email)) {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "Please enter a valid email address",
-      }));
-    } else {
-      setErrors((prevState) => ({
-        ...prevState,
-        email: "",
-      }));
-    }
-
-    setFormData({ ...formData, ...fieldToUpdate });
-  }
+  } = useMultiplestepForm(3, () => {
+    onFinish();
+  });
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (Object.values(errors).some((error) => error)) {
-      return;
-    }
     nextStep();
   };
 
-  const calculateWidth = () => {
+  const onFinish = () => {
+    if (Object.keys(errors).length > 0) {
+      return toast({
+        title: "Error",
+        description: JSON.stringify(errors, null, 2),
+        variant: "destructive",
+      });
+    }
+    handleSubmit(async (data) => {
+      await ProfileAPI.updateProfile(data);
+
+      toast({
+        title: "Success",
+        description: "Your profile has been updated.",
+      });
+    })();
+  };
+
+  const calculateWidth = useCallback(() => {
     switch (currentStepIndex) {
       case 0:
-        return "25%";
+        return "33%";
       case 1:
-        return "50%";
-      case 2:
-        return "75%";
+        return "66%";
       default:
         return "100%";
     }
-  };
+  }, [currentStepIndex]);
 
   return (
     <section className="">
@@ -154,25 +122,13 @@ export default function ProfilePage() {
             >
               <AnimatePresence mode="wait">
                 {currentStepIndex === 0 && (
-                  <UserInfoForm
-                    key="step1"
-                    {...formData}
-                    updateForm={updateForm}
-                    errors={errors}
-                  />
+                  <UserInfoForm key="step1" updateForm={setValue} />
                 )}
                 {currentStepIndex === 1 && (
-                  <PlanForm key="step2" {...formData} updateForm={updateForm} />
+                  <PlanForm key="step2" register={register} />
                 )}
                 {currentStepIndex === 2 && (
-                  <AddonsForm
-                    key="step3"
-                    {...formData}
-                    updateForm={updateForm}
-                  />
-                )}
-                {currentStepIndex === 3 && (
-                  <FinalStep key="step4" {...formData} goTo={goTo} />
+                  <AddonsForm key="step3" updateForm={setValue} />
                 )}
               </AnimatePresence>
               <div className="w-full items-center flex justify-between">

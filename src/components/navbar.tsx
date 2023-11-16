@@ -54,6 +54,12 @@ const Navbar = () => {
           >
             Profile
           </Link>
+          <Link
+            href="/admin/skills"
+            className={cn(buttonVariants({ variant: "ghost" }))}
+          >
+            Skills
+          </Link>
           <Button onClick={logout}>
             <LogOutIcon className="h-4 w-4" />
           </Button>

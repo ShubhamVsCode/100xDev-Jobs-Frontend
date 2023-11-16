@@ -24,10 +24,14 @@ export interface RequestWithUser extends Request {
 
 // Skill
 export const SkillSchema = z.object({
+  _id: z.string().optional(),
   name: z.string(),
   slug: z.string(),
   level: z.number(),
+  picture: z.string(),
 });
+
+export type SkillType = z.infer<typeof SkillSchema>;
 
 // Project
 export const ProjectSchema = z.object({
@@ -41,7 +45,7 @@ export const ProjectSchema = z.object({
 // Social
 export const SocialSchema = z.object({
   portfolio: z.string().url("Invalid Portfolio URL").optional(),
-  github: z.string().url("Invalid Github URL").optional(),
+  github: z.string().url("Invalid Github URL"),
   linkedin: z.string().url("Invalid Linkedin URL").optional(),
   twitter: z.string().url("Invalid Twitter URL").optional(),
   youtube: z.string().url("Invalid Youtube URL").optional(),
@@ -52,7 +56,7 @@ export const ProfileSchema = z.object({
   _id: z.string().optional(),
   picture: z.string().url("Invalid Profile Picture URL").optional(),
   social: SocialSchema,
-  skills: z.array(SkillSchema).optional(),
+  skills: z.array(z.string()).optional(),
   projects: z.array(ProjectSchema).optional(),
   likes: z.number().optional(),
 });
