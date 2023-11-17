@@ -51,10 +51,17 @@ const VerifyForm = ({ isVerified }: { isVerified?: boolean }) => {
       title="Verify yourself with 100xDev Cohort"
       description="This is the final step. Please verify yourself with 100xDev Cohort."
     >
-      <div>
-        <Button type="button" onClick={verifyHandler}>
-          {isVerified || verified ? "Verified" : "Verify"}
-        </Button>
+      <div className="verify-form mt-10">
+        <div className="verify-button-container">
+          <button className="verify" onClick={verifyHandler} type="button">
+            <span className="circle" aria-hidden="true">
+              <span className="icon arrow"></span>
+            </span>
+            <span className="button-text">
+              {isVerified || verified ? "Verified" : "Verify"}
+            </span>
+          </button>
+        </div>
       </div>
     </FormWrapper>
   );
