@@ -15,6 +15,10 @@ class ProfileAPI {
   static async getProfile() {
     return await get("/profile");
   }
+
+  static async verifyMe() {
+    return await get("/profile/verify");
+  }
 }
 
 export default ProfileAPI;

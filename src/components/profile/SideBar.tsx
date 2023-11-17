@@ -70,6 +70,26 @@ const SideBar = ({ currentStepIndex, goTo }: NavProps) => {
               </RoughNotation>
             </button>
           </li>
+          <li className="flex flex-col items-start font-medium">
+            <span className="hidden text-neutral-500 uppercase text-sm md:flex">
+              step 4
+            </span>
+            <button
+              tabIndex={0}
+              onClick={() => goTo(3)}
+              className={`text-sm ${
+                currentStepIndex === 3 ? "text-[#56cc67]" : ""
+              } md:text-base`}
+            >
+              <RoughNotation
+                type="underline"
+                show={currentStepIndex === 3}
+                color="#56cc67"
+              >
+                Verification
+              </RoughNotation>
+            </button>
+          </li>
         </ul>
       </nav>
     </div>
