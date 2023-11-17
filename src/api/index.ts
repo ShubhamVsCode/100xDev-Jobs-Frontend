@@ -18,8 +18,9 @@ class ApiClient {
   }
 
   private _getClient(baseURL?: string): AxiosInstance {
+    const BASE_URL = baseURL || process.env.NEXT_PUBLIC_API_URL;
     const apiClient = axios.create({
-      baseURL: baseURL || process.env.NEXT_PUBLIC_API_URL,
+      baseURL: BASE_URL,
       withCredentials: true,
     });
     apiClient.interceptors.request.use(
