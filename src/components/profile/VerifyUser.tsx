@@ -1,13 +1,10 @@
 "use client";
 import FormWrapper from "./FormWrapper";
-import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
-import { ProfileType, SkillType, UserType } from "@/lib/validations/auth";
-import { useEffect, useState } from "react";
+import { UserType } from "@/lib/validations/auth";
+import { useState } from "react";
 import ProfileAPI from "@/api/profile";
-import SelectableSkillsCard from "./SelectableSkillsCard";
 import { Button } from "../ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { AxiosError } from "axios";
 
 const VerifyForm = ({ isVerified }: { isVerified?: boolean }) => {
   const [verified, setVerified] = useState(isVerified || false);
