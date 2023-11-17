@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileSchema, ProfileType } from "@/lib/validations/auth";
 import { toast } from "@/components/ui/use-toast";
 import ProfileAPI from "@/api/profile";
+import VerifyForm from "@/components/profile/VerifyUser";
 
 export default function ProfilePage() {
   const { user } = useUserStore();
@@ -45,7 +46,7 @@ export default function ProfilePage() {
     steps,
     goTo,
     showSuccessMsg,
-  } = useMultiplestepForm(3, () => {
+  } = useMultiplestepForm(4, () => {
     onFinish();
   });
 
@@ -75,9 +76,11 @@ export default function ProfilePage() {
   const calculateWidth = useCallback(() => {
     switch (currentStepIndex) {
       case 0:
-        return "33%";
+        return "25%";
       case 1:
-        return "66%";
+        return "50%";
+      case 2:
+        return "75%";
       default:
         return "100%";
     }
@@ -163,6 +166,7 @@ export default function ProfilePage() {
                     updateForm={setValue}
                   />
                 )}
+                {currentStepIndex === 3 && <VerifyForm key="step4" />}
               </AnimatePresence>
               <div className="w-full items-center flex justify-between">
                 <div className="">
