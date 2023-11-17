@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useMultiplestepForm } from "@/hooks/useMultiStepForm";
 import { AnimatePresence, motion } from "framer-motion";
 import UserInfoForm from "@/components/profile/UserInfoForm";
-import PlanForm from "@/components/profile/PlanForm";
-import AddonsForm from "@/components/profile/AddonsForm";
-import FinalStep from "@/components/profile/FinalStep";
+import SocialForm from "@/components/profile/SocialForm";
+import SkillsForm from "@/components/profile/SkillsForm";
 import SuccessMessage from "@/components/profile/SuccessMessage";
 import SideBar from "@/components/profile/SideBar";
 import useUserStore from "@/store/user-store";
@@ -20,14 +19,21 @@ import ProfileAPI from "@/api/profile";
 
 export default function ProfilePage() {
   const { user } = useUserStore();
+  const [profile, setProfile] = useState<ProfileType>();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
+    control,
+    reset,
   } = useForm<ProfileType>({
     resolver: zodResolver(ProfileSchema),
+    defaultValues: {
+      ...profile,
+    },
   });
 
   const {
@@ -77,6 +83,25 @@ export default function ProfilePage() {
     }
   }, [currentStepIndex]);
 
+  const getProfile = async () => {
+    try {
+      const response = (await ProfileAPI.getProfile()) as {
+        profile?: ProfileType;
+      };
+      const profile = response?.profile;
+
+      if (profile) {
+        reset(profile);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <section className="">
       <div
@@ -122,13 +147,21 @@ export default function ProfilePage() {
             >
               <AnimatePresence mode="wait">
                 {currentStepIndex === 0 && (
-                  <UserInfoForm key="step1" updateForm={setValue} />
+                  <UserInfoForm
+                    key="step1"
+                    getValues={getValues}
+                    updateForm={setValue}
+                  />
                 )}
                 {currentStepIndex === 1 && (
-                  <PlanForm key="step2" register={register} />
+                  <SocialForm key="step2" register={register} />
                 )}
                 {currentStepIndex === 2 && (
-                  <AddonsForm key="step3" updateForm={setValue} />
+                  <SkillsForm
+                    key="step3"
+                    initialSkills={getValues("skills") as string[]}
+                    updateForm={setValue}
+                  />
                 )}
               </AnimatePresence>
               <div className="w-full items-center flex justify-between">

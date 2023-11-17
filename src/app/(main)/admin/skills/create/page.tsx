@@ -27,7 +27,9 @@ const AdminSkillsCreate = () => {
   const onSubmit = async (data: SkillType) => {
     // console.log(data);
     try {
-      const response = await ProfileAPI.addSkills(data);
+      const response = (await ProfileAPI.addSkills(data)) as {
+        message?: string;
+      };
       console.log(response);
       toast({
         title: "Skills Created",

@@ -52,7 +52,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         title: "Logged in",
         variant: "default",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Login Failed",
         description:

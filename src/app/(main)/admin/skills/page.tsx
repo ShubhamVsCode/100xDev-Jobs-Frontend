@@ -11,7 +11,9 @@ const AdminSkillsPage = () => {
   const [skills, setSkills] = useState<SkillType[]>([]);
 
   const getAllSkills = async () => {
-    const response = await ProfileAPI.getAllSkills();
+    const response = (await ProfileAPI.getAllSkills()) as {
+      skills: SkillType[];
+    };
     const skills = response?.skills;
 
     setSkills(skills as SkillType[]);
@@ -29,7 +31,10 @@ const AdminSkillsPage = () => {
       <section className="grid grid-cols-5 gap-4">
         {skills?.map((skill) => {
           return (
-            <div className="flex flex-col rounded-md shadow-md border px-5 py-3">
+            <div
+              className="flex flex-col rounded-md shadow-md border px-5 py-3"
+              key={skill._id}
+            >
               <p className="text-lg">{skill.name}</p>
               <p className="text-sm">Level: {skill.level}</p>
               <img

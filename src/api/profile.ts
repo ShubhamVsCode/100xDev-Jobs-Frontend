@@ -12,6 +12,9 @@ class ProfileAPI {
   static async updateProfile(data: ProfileType) {
     return await put("/profile/update", data);
   }
+  static async getProfile() {
+    return await get("/profile");
+  }
 }
 
 export default ProfileAPI;

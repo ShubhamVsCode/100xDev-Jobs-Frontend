@@ -15,7 +15,7 @@ type stepProps = {
   register: UseFormRegister<ProfileType>;
 };
 
-const PlanForm = ({ register }: stepProps) => {
+const SocialForm = ({ register }: stepProps) => {
   return (
     <FormWrapper
       title="Fill your social presence"
@@ -65,4 +65,4 @@ const PlanForm = ({ register }: stepProps) => {
   );
 };
 
-export default PlanForm;
+export default SocialForm;

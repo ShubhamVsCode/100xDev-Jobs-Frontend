@@ -55,8 +55,7 @@ export default function UserRegisterForm({
         title: "Registered Successfully",
         variant: "default",
       });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
       toast({
         title: "Registration Failed",
         description:

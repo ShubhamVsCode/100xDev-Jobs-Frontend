@@ -1,8 +1,9 @@
 import { cn, getObjectURL } from "@/lib/utils";
 import { SkillType } from "@/lib/validations/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type propType = SkillType & {
+  isSelected: boolean;
   onClickHandler: (skill: SkillType) => void;
 };
 const SelectableSkillsCard = ({
@@ -11,9 +12,14 @@ const SelectableSkillsCard = ({
   level,
   picture,
   slug,
+  isSelected,
   onClickHandler,
 }: propType) => {
   const [selected, setSelected] = useState(false);
+
+  useEffect(() => {
+    setSelected(isSelected);
+  }, [isSelected]);
 
   return (
     <div

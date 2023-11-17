@@ -2,18 +2,22 @@ import FormWrapper from "./FormWrapper";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { UploadDropzone, Uploader } from "@/utils/uploadthing";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import useUserStore from "@/store/user-store";
-import { UseFormSetValue } from "react-hook-form";
+import { UseFormGetValues, UseFormSetValue } from "react-hook-form";
 import { ProfileType } from "@/lib/validations/auth";
 
 type StepProps = {
   updateForm: UseFormSetValue<ProfileType>;
+  getValues: UseFormGetValues<ProfileType>;
 };
 
-const UserInfoForm = ({ updateForm }: StepProps) => {
-  const [tempProfilePicture, setTempProfilePicture] = useState("");
+const UserInfoForm = ({ updateForm, getValues }: StepProps) => {
+  const [tempProfilePicture, setTempProfilePicture] = useState(
+    getValues("picture")
+  );
+
   const { user } = useUserStore();
   if (!user) {
     return;
@@ -28,9 +32,9 @@ const UserInfoForm = ({ updateForm }: StepProps) => {
       <div className="w-full flex flex-col gap-5 ">
         <div className="flex flex-col gap-2">
           <div className="grid grid-cols-2 gap-5">
-            {tempProfilePicture && (
+            {(getValues("picture") || tempProfilePicture) && (
               <img
-                src={tempProfilePicture}
+                src={tempProfilePicture || getValues("picture")}
                 alt="Profile Picture"
                 className="w-full h-full object-cover rounded-md "
               />
@@ -42,7 +46,7 @@ const UserInfoForm = ({ updateForm }: StepProps) => {
               endpoint="imageUploader"
               className={cn(
                 "border dark:border-white/20 mt-0",
-                !tempProfilePicture && "col-span-full"
+                !(getValues("picture") || tempProfilePicture) && "col-span-full"
               )}
               onClientUploadComplete={(res) => {
                 console.log("Files: ", res);
