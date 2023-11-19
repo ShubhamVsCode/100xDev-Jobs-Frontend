@@ -40,15 +40,15 @@ const ThumbnailUploader = () => {
 
       <div>
         <Carousel
-          // showArrows
+          showArrows
           imageByIndex={(index) => URL.createObjectURL(files[index])}
           slides={Array.from(Array(files.length).keys())}
-          // canDelete
-          // onDelete={(index) => {
-          //   const newFiles = [...files];
-          //   newFiles.splice(index, 1);
-          //   setFiles(newFiles);
-          // }}
+          canDelete
+          onDelete={(index) => {
+            const newFiles = [...files];
+            newFiles.splice(index, 1);
+            setFiles(newFiles);
+          }}
         />
       </div>
     </section>
