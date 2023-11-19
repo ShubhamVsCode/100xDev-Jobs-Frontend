@@ -30,7 +30,7 @@ const ThumbnailUploader = () => {
           <p>Drop the files here ...</p>
         ) : (
           <>
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <p>Drag & drop some files here, or click to select files</p>
             <p className="text-sm text-center text-slate-500">
               Accepted file type .jpeg & .png
             </p>
