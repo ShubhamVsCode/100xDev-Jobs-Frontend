@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils";
+import { ProjectType } from "@/lib/validations/auth";
 import { Listbox } from "@headlessui/react";
 import { Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { UseFormSetValue } from "react-hook-form";
 
 const tags = [
   { id: 1, label: "React Js" },
@@ -13,9 +15,15 @@ const tags = [
   { id: 7, label: "Docker" },
 ];
 
-const TagInput = () => {
+const TagInput = ({ setValue }: { setValue: UseFormSetValue<ProjectType> }) => {
   const [selectedItem, setSelectedItem] = useState<typeof tags>([]);
 
+  useEffect(() => {
+    setValue(
+      "tags",
+      selectedItem.map((item) => item?.label)
+    );
+  }, [selectedItem]);
   return (
     <Listbox value={selectedItem} onChange={setSelectedItem} multiple>
       <Listbox.Button

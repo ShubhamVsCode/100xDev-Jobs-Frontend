@@ -1,10 +1,12 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Carousel from "./carousel";
+import useProjectStore from "@/store/project-store";
 
 const ThumbnailUploader = () => {
   const [files, setFiles] = useState<File[]>([]);
+  const { setThumbnails } = useProjectStore();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Do something with the files
@@ -18,6 +20,10 @@ const ThumbnailUploader = () => {
       "image/png": [],
     },
   });
+
+  useEffect(() => {
+    setThumbnails(files);
+  }, [files]);
 
   return (
     <section>

@@ -35,12 +35,18 @@ export type SkillType = z.infer<typeof SkillSchema>;
 
 // Project
 export const ProjectSchema = z.object({
-  name: z.string(),
-  link: z.string().url("Invalid Project URL").optional(),
+  name: z.string().min(1, "Name is required"),
+  githubLink: z
+    .string()
+    .min(1, "Github URL is required")
+    .url("Invalid Github URL"),
+  deployedLink: z.string().optional(),
   description: z.string(),
   images: z.array(z.string()).optional(),
   videoLink: z.string().optional(),
+  tags: z.array(z.string()),
 });
+export type ProjectType = z.infer<typeof ProjectSchema>;
 
 // Social
 export const SocialSchema = z.object({

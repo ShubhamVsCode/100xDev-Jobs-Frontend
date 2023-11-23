@@ -1,7 +1,16 @@
-import { ProfileType, SkillType, UserType } from "@/lib/validations/auth";
+import {
+  ProfileType,
+  ProjectType,
+  SkillType,
+  UserType,
+} from "@/lib/validations/auth";
 import { get, post, put } from "./index";
 
 class ProfileAPI {
+  static async addProject(data: ProjectType) {
+    return await post("/profile/project/add", data);
+  }
+
   static async addSkills(data: SkillType) {
     return await post("/profile/skills/add", { skills: data });
   }
