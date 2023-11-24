@@ -1,7 +1,7 @@
 .embla {
   --slide-spacing: 1rem;
   --slide-size: 80%;
-  --slide-height: 19rem;
+  --slide-height: 10rem;
   padding: 1.6rem 0rem;
   position: relative;
 }

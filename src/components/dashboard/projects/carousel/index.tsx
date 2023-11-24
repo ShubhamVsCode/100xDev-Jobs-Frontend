@@ -3,12 +3,17 @@ import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
 import { Thumb } from "./carousel-thumb";
 import "./carousel-css.css";
 import { NextButton, PrevButton, usePrevNextButtons } from "./carousel-arrow";
+import { cn } from "@/lib/utils";
 
 type PropType = {
   slides: number[];
   options?: EmblaOptionsType;
   imageByIndex: (index: number) => string;
   showArrows?: boolean;
+  showThumbs?: boolean;
+  fullWidth?: boolean;
+  height?: string;
+  className?: string;
 } & (
   | {
       canDelete: true;
@@ -55,9 +60,17 @@ const Carousel: React.FC<PropType> = (props) => {
     emblaMainApi.on("select", onSelect);
     emblaMainApi.on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
+  const slideHeight = `--slide-height:${props.height}rem`;
 
   return (
-    <div className="embla">
+    <div
+      className={cn(
+        "embla",
+        props.height && `![${slideHeight}]`,
+        props.fullWidth && "![--slide-size:100%]",
+        props.className
+      )}
+    >
       <div className="embla__viewport" ref={emblaMainRef}>
         <div className="embla__container">
           {slides.map((index) => (
@@ -75,38 +88,42 @@ const Carousel: React.FC<PropType> = (props) => {
         </div>
       </div>
       {props.showArrows && slides.length > 0 && (
-        <div className="embla__buttons">
+        <div
+          className={cn("embla__buttons", !props?.showThumbs && "!bottom-1")}
+        >
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       )}
 
-      <div className="embla-thumbs">
-        <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
-          <div className="embla-thumbs__container">
-            {slides.map((index) =>
-              props.canDelete ? (
-                <Thumb
-                  onDelete={() => props.onDelete(index)}
-                  onClick={() => onThumbClick(index)}
-                  selected={index === selectedIndex}
-                  index={index}
-                  imgSrc={props.imageByIndex(index)}
-                  key={index}
-                />
-              ) : (
-                <Thumb
-                  onClick={() => onThumbClick(index)}
-                  selected={index === selectedIndex}
-                  index={index}
-                  imgSrc={props.imageByIndex(index)}
-                  key={index}
-                />
-              )
-            )}
+      {props?.showThumbs && (
+        <div className="embla-thumbs">
+          <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
+            <div className="embla-thumbs__container">
+              {slides.map((index) =>
+                props.canDelete ? (
+                  <Thumb
+                    onDelete={() => props.onDelete(index)}
+                    onClick={() => onThumbClick(index)}
+                    selected={index === selectedIndex}
+                    index={index}
+                    imgSrc={props.imageByIndex(index)}
+                    key={index}
+                  />
+                ) : (
+                  <Thumb
+                    onClick={() => onThumbClick(index)}
+                    selected={index === selectedIndex}
+                    index={index}
+                    imgSrc={props.imageByIndex(index)}
+                    key={index}
+                  />
+                )
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

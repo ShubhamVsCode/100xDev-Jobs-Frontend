@@ -11,6 +11,10 @@ class ProfileAPI {
     return await post("/profile/project/add", data);
   }
 
+  static async getProjects() {
+    return await get("/profile/projects");
+  }
+
   static async addSkills(data: SkillType) {
     return await post("/profile/skills/add", { skills: data });
   }
