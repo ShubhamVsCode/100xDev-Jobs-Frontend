@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { usePathname } from "next/navigation";
 
 const SidebarLink = ({
