@@ -13,6 +13,9 @@ import { Button } from "@/components/ui/button";
 import useProjectStore from "@/store/project-store";
 import UploadAPI from "@/api/upload";
 import ProfileAPI from "@/api/profile";
+import { toast } from "@/components/ui/use-toast";
+import { useParams } from "next/navigation";
+import PublicProjectAPI from "@/api/project";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 type OnChange = (
@@ -22,18 +25,23 @@ type OnChange = (
 ) => void;
 
 const ProjectForm = () => {
+  const { projectId } = useParams();
+
   const [description, setDescription] = useState("");
   const {
     handleSubmit,
     control,
     register,
     formState: { errors },
+    getValues,
+    watch,
     setValue,
   } = useForm<ProjectType>({
     resolver: zodResolver(ProjectSchema),
   });
 
-  const { thumbnails } = useProjectStore();
+  const { thumbnails, setCurrentThumbnails, currentThumbnails } =
+    useProjectStore();
 
   const onChange = useCallback<OnChange>((val) => {
     setDescription(val || "");
@@ -68,14 +76,46 @@ const ProjectForm = () => {
     await uploadImages();
 
     await handleSubmit(async (data) => {
-      const response = await ProfileAPI.addProject(data);
+      const response: any = await ProfileAPI.addProject(data);
       console.log(response);
+      toast({
+        title: response?.message,
+      });
     })();
   };
 
   useEffect(() => {
     setValue("description", description);
   }, [description, setValue]);
+
+  const getReadMeFile = async () => {
+    if (!getValues("githubLink")) return;
+    const readmeContent = await ProfileAPI.getReadme(getValues("githubLink"));
+    setDescription(readmeContent);
+  };
+
+  const getCurrentProject = async () => {
+    if (!projectId) return;
+
+    const response = await PublicProjectAPI.getProjectById(projectId as string);
+
+    if (response) {
+      setValue("name", response.name);
+      setValue("githubLink", response.githubLink);
+      setValue("deployedLink", response.deployedLink);
+      // setValue("description", response.description);
+      setDescription(response.description);
+      setValue("tags", response.tags);
+      // setValue("images", response.images);
+      setCurrentThumbnails(response.images!);
+    }
+  };
+
+  useEffect(() => {
+    if (projectId) {
+      getCurrentProject();
+    }
+  }, [projectId]);
 
   return (
     <form onSubmit={onSubmit} className="space-y-3">
@@ -123,7 +163,14 @@ const ProjectForm = () => {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="project-description">Project Description</Label>
+        <div className="flex justify-between items-center">
+          <Label htmlFor="project-description">Project Description</Label>
+          {watch("githubLink") && (
+            <Button onClick={getReadMeFile} variant={"outline"} type="button">
+              Get Github Readme
+            </Button>
+          )}
+        </div>
         <MDEditor
           style={{ width: "100%" }}
           value={description}
@@ -132,7 +179,7 @@ const ProjectForm = () => {
           preview={"edit"}
         />
       </div>
-      <Button>Create Project</Button>
+      <Button>{projectId ? "Update" : "Create"} Project</Button>
     </form>
   );
 };

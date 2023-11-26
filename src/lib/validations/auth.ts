@@ -35,6 +35,7 @@ export type SkillType = z.infer<typeof SkillSchema>;
 
 // Project
 export const ProjectSchema = z.object({
+  _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   githubLink: z
     .string()

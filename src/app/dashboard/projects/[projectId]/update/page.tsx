@@ -1,10 +1,10 @@
 import ProjectForm from "@/components/dashboard/projects/project-form";
 import ThumbnailUploader from "@/components/dashboard/projects/thumbnail-uploader";
 
-const ProjectAddPage = () => {
+const ProjectUpdatePage = () => {
   return (
     <div>
-      <h1 className="text-2xl font-semibold">Add Project</h1>
+      <h1 className="text-2xl font-semibold">Update Project</h1>
       <h3 className="text-sm mt-2 text-slate-500">
         Upload project which will boost your visibility
       </h3>
@@ -16,4 +16,4 @@ const ProjectAddPage = () => {
   );
 };
 
-export default ProjectAddPage;
+export default ProjectUpdatePage;

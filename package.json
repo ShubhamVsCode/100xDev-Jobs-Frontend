@@ -12,6 +12,7 @@
     "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.2",
     "@mdxeditor/editor": "^1.10.0",
+    "@octokit/core": "^5.0.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
+    "@tailwindcss/typography": "^0.5.10",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

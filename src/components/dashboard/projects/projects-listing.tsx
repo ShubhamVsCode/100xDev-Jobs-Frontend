@@ -6,6 +6,9 @@ import Carousel from "./carousel";
 import { getObjectURL } from "@/lib/utils";
 import Markdown from "react-markdown";
 import dynamic from "next/dynamic";
+import { ArrowUpCircle } from "lucide-react";
+import { LinkButton } from "@/components/ui/button";
+import ProjectCarousel from "./project-carousel";
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 const ProjectsListing = () => {
@@ -17,7 +20,6 @@ const ProjectsListing = () => {
         projects: ProjectType[];
       };
       const projects = response?.projects;
-      console.log(response);
       setProjects(projects as ProjectType[]);
     })();
   }, []);
@@ -26,18 +28,20 @@ const ProjectsListing = () => {
     <div className="grid md:grid-cols-3 gap-4">
       {projects
         ?.map((project) => (
-          <div key={project.name} className="space-y-4 border p-2 rounded-lg">
-            <Carousel
-              slides={Array.from(Array(project.images?.length).keys())}
-              imageByIndex={(index) =>
-                getObjectURL(project.images?.at(index) as string)
-              }
-              showArrows
-              height="10"
-              fullWidth
-              className="!p-0"
-            ></Carousel>
-            <h1 className="text-xl">{project.name}</h1>
+          <div
+            key={project._id}
+            className="space-y-4 border p-2 rounded-lg group"
+          >
+            <ProjectCarousel images={project.images} />
+            <div className="flex justify-between">
+              <h1 className="text-lg font-semibold">{project.name}</h1>
+              <LinkButton
+                variant={"link"}
+                href={`/dashboard/projects/${project._id}`}
+              >
+                <ArrowUpCircle className="rotate-45 text-gray-400 group-hover:text-gray-100 duration-100" />
+              </LinkButton>
+            </div>
 
             <div>
               {project.tags?.map((tag) => (

@@ -60,14 +60,18 @@ const Carousel: React.FC<PropType> = (props) => {
     emblaMainApi.on("select", onSelect);
     emblaMainApi.on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
-  const slideHeight = `--slide-height:${props.height}rem`;
+
+  const slideHeight =
+    props.height === "lg"
+      ? `![--slide-height:19rem]`
+      : `![--slide-height:10rem]`;
 
   return (
     <div
       className={cn(
         "embla",
-        props.height && `![${slideHeight}]`,
-        props.fullWidth && "![--slide-size:100%]",
+        props.height && `${slideHeight}`,
+        (props.fullWidth || slides.length === 1) && "![--slide-size:100%]",
         props.className
       )}
     >
