@@ -46,6 +46,7 @@ export const ProjectSchema = z.object({
   images: z.array(z.string()).optional(),
   videoLink: z.string().optional(),
   tags: z.array(z.string()),
+  likes: z.number().optional(),
 });
 export type ProjectType = z.infer<typeof ProjectSchema>;
 
@@ -64,7 +65,7 @@ export const ProfileSchema = z.object({
   picture: z.string().url("Invalid Profile Picture URL").optional(),
   social: SocialSchema,
   skills: z.array(z.string()).optional(),
-  projects: z.array(ProjectSchema).optional(),
+  projects: z.array(z.string()).optional(),
   likes: z.number().optional(),
 });
 

@@ -13,6 +13,9 @@ class ProfileAPI {
   static async addProject(data: ProjectType) {
     return await post("/profile/project/add", data);
   }
+  static async updateProject(data: ProjectType, projectId: string) {
+    return await put(`/profile/project/update/${projectId}`, data);
+  }
 
   static async getProjects() {
     return await get("/profile/projects");

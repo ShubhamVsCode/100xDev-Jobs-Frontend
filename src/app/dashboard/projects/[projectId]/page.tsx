@@ -28,7 +28,8 @@ const UpdatePage = async ({ params }: { params: { projectId: string } }) => {
           <div className="mt-5 flex justify-between">
             <div>
               <Button variant={"outline"}>
-                <HeartIcon className="h-4 w-4" />
+                <HeartIcon className="mr-2 h-4 w-4" />
+                {Number(project.likes || 0)}
               </Button>
             </div>
             <div className="space-x-2">

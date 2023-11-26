@@ -7,42 +7,40 @@ interface ProjectState {
   setProject: (project: ProjectType) => void;
   removeProject: () => void;
   setProjectFields: (field: keyof ProjectType, value: string) => void;
-  thumbnails: File[] | null;
-  setThumbnail: (thumbnail: File) => void;
-  setThumbnails: (thumbnails: File[]) => void;
+  thumbnails: {
+    uploaded: string[];
+    notUploaded: File[];
+  };
+  setUploadedThumbnails: (thumbnails: string[]) => void;
+  setNotUploadedThumbnails: (thumbnails: File[]) => void;
 }
 
-const useProjectStore = create(
-  persist<ProjectState>(
-    (set) => ({
-      project: null,
-      setProject: (project) => set((state) => ({ ...state, project })),
-      removeProject: () => set((state) => ({ ...state, project: null })),
-      setProjectFields: (field, value) =>
-        set((state) => ({
-          ...state,
-          project: {
-            ...state?.project!,
-            [field]: value,
-          },
-        })),
-      thumbnails: null,
-      setThumbnail: (thumbnail) =>
-        set((state) => ({
-          ...state,
-          thumbnails: [...state?.thumbnails!, thumbnail],
-        })),
-      setThumbnails: (thumbnails) =>
-        set((state) => ({
-          ...state,
-          thumbnails,
-        })),
-    }),
-    {
-      name: "project-store",
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+const useProjectStore = create<ProjectState>((set) => ({
+  project: null,
+  setProject: (project) => set((state) => ({ ...state, project })),
+  removeProject: () => set((state) => ({ ...state, project: null })),
+  setProjectFields: (field, value) =>
+    set((state) => ({
+      ...state,
+      project: {
+        ...state?.project!,
+        [field]: value,
+      },
+    })),
+  thumbnails: {
+    uploaded: [],
+    notUploaded: [],
+  },
+  setUploadedThumbnails: (thumbnails) =>
+    set((state) => ({
+      ...state,
+      thumbnails: { ...state.thumbnails, uploaded: thumbnails },
+    })),
+  setNotUploadedThumbnails: (thumbnails) =>
+    set((state) => ({
+      ...state,
+      thumbnails: { ...state.thumbnails, notUploaded: thumbnails },
+    })),
+}));
 
 export default useProjectStore;

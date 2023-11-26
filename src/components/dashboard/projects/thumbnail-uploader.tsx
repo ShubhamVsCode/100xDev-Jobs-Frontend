@@ -3,15 +3,24 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Carousel from "./carousel";
 import useProjectStore from "@/store/project-store";
+import { getObjectURL } from "@/lib/utils";
+
+interface UploadImagesType {
+  uploaded: string[];
+  notUploaded: File[];
+}
 
 const ThumbnailUploader = () => {
-  const [files, setFiles] = useState<File[]>([]);
-  const { setThumbnails } = useProjectStore();
+  // const [files, setFiles] = useState<(File | string)[]>([]);
+  const { thumbnails, setNotUploadedThumbnails, setUploadedThumbnails } =
+    useProjectStore();
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Do something with the files
-    setFiles((prev) => [...prev, ...acceptedFiles]);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setNotUploadedThumbnails([...thumbnails.notUploaded, ...acceptedFiles]);
+    },
+    [thumbnails]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -21,9 +30,22 @@ const ThumbnailUploader = () => {
     },
   });
 
-  useEffect(() => {
-    setThumbnails(files);
-  }, [files]);
+  // const [images, setImages] = useState<UploadImagesType>({
+  //   uploaded: thumbnails.uploaded || [],
+  //   notUploaded: thumbnails.notUploaded || [],
+  // });
+
+  // useEffect(() => {
+  //   setUploadedThumbnails(images.uploaded);
+  //   setNotUploadedThumbnails(images.notUploaded);
+  // }, [images]);
+
+  // useEffect(() => {
+  //   setImages({
+  //     uploaded: thumbnails.uploaded || [],
+  //     notUploaded: thumbnails.notUploaded || [],
+  //   });
+  // }, [thumbnails]);
 
   return (
     <section>
@@ -48,14 +70,38 @@ const ThumbnailUploader = () => {
         <Carousel
           showArrows
           showThumbs
-          imageByIndex={(index) => URL.createObjectURL(files[index])}
-          slides={Array.from(Array(files.length).keys())}
+          imageByIndex={(index) => {
+            if (index < thumbnails.uploaded?.length) {
+              return getObjectURL(thumbnails.uploaded?.at(index) as string);
+            } else {
+              return URL.createObjectURL(
+                thumbnails.notUploaded?.at(
+                  index - thumbnails.uploaded?.length
+                ) as File
+              );
+            }
+          }}
+          slides={Array.from(
+            Array(
+              Number(thumbnails.uploaded?.length || 0) +
+                Number(thumbnails.notUploaded?.length || 0)
+            ).keys()
+          )}
           canDelete
-          height="19"
+          height="lg"
           onDelete={(index) => {
-            const newFiles = [...files];
-            newFiles.splice(index, 1);
-            setFiles(newFiles);
+            if (index < thumbnails.uploaded?.length) {
+              setUploadedThumbnails(
+                thumbnails.uploaded?.filter((_, i) => i !== index) || []
+              );
+            }
+            if (index >= thumbnails.uploaded?.length) {
+              setNotUploadedThumbnails(
+                thumbnails.notUploaded?.filter(
+                  (_, i) => i !== index - thumbnails.uploaded?.length
+                ) || []
+              );
+            }
           }}
         />
       </div>

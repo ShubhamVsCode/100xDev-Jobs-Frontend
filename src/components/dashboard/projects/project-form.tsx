@@ -40,20 +40,19 @@ const ProjectForm = () => {
     resolver: zodResolver(ProjectSchema),
   });
 
-  const { thumbnails, setCurrentThumbnails, currentThumbnails } =
-    useProjectStore();
+  const { thumbnails, setUploadedThumbnails } = useProjectStore();
 
   const onChange = useCallback<OnChange>((val) => {
     setDescription(val || "");
   }, []);
 
   const uploadImages = useCallback(async () => {
-    if (!thumbnails?.length) return;
+    if (!thumbnails?.notUploaded?.length) return;
 
     let imagesKeys: string[] = [];
 
     await Promise.all(
-      thumbnails.map(async (file) => {
+      thumbnails?.notUploaded.map(async (file) => {
         try {
           const { objectKey, url } = await UploadAPI.uploadFile(
             file.name,
@@ -67,7 +66,7 @@ const ProjectForm = () => {
       })
     );
 
-    setValue("images", imagesKeys);
+    setValue("images", [...thumbnails.uploaded, ...imagesKeys]);
   }, [thumbnails]);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +75,9 @@ const ProjectForm = () => {
     await uploadImages();
 
     await handleSubmit(async (data) => {
-      const response: any = await ProfileAPI.addProject(data);
+      const response: any = projectId
+        ? await ProfileAPI.updateProject(data, projectId as string) // Update Project
+        : await ProfileAPI.addProject(data); // Add Project
       console.log(response);
       toast({
         title: response?.message,
@@ -107,7 +108,7 @@ const ProjectForm = () => {
       setDescription(response.description);
       setValue("tags", response.tags);
       // setValue("images", response.images);
-      setCurrentThumbnails(response.images!);
+      setUploadedThumbnails(response.images!);
     }
   };
 
