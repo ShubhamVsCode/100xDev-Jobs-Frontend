@@ -63,7 +63,7 @@ export const SocialSchema = z.object({
 // Profile
 export const ProfileSchema = z.object({
   _id: z.string().optional(),
-  picture: z.string().url("Invalid Profile Picture URL").optional(),
+  picture: z.string().optional(),
   social: SocialSchema,
   skills: z.array(z.string()).optional(),
   projects: z.array(z.string()).optional(),
