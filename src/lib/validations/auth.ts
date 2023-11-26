@@ -47,6 +47,7 @@ export const ProjectSchema = z.object({
   videoLink: z.string().optional(),
   tags: z.array(z.string()),
   likes: z.number().optional(),
+  userId: UserSchema.optional(),
 });
 export type ProjectType = z.infer<typeof ProjectSchema>;
 

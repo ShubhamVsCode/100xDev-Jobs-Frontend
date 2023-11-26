@@ -73,6 +73,17 @@ const ProjectShowcase = async ({
               )}
             </div>
           </div>
+
+          {project.userId?.username && (
+            <div className="mt-5">
+              <Link href={`/user/${project.userId?.username}`}>
+                Built By:{" "}
+                <span className="underline text-blue-400">
+                  {project.userId?.username}
+                </span>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div>
