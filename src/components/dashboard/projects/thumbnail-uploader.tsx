@@ -1,17 +1,12 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+
+import { useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Carousel from "./carousel";
 import useProjectStore from "@/store/project-store";
 import { getObjectURL } from "@/lib/utils";
 
-interface UploadImagesType {
-  uploaded: string[];
-  notUploaded: File[];
-}
-
 const ThumbnailUploader = () => {
-  // const [files, setFiles] = useState<(File | string)[]>([]);
   const { thumbnails, setNotUploadedThumbnails, setUploadedThumbnails } =
     useProjectStore();
 
@@ -30,22 +25,12 @@ const ThumbnailUploader = () => {
     },
   });
 
-  // const [images, setImages] = useState<UploadImagesType>({
-  //   uploaded: thumbnails.uploaded || [],
-  //   notUploaded: thumbnails.notUploaded || [],
-  // });
-
-  // useEffect(() => {
-  //   setUploadedThumbnails(images.uploaded);
-  //   setNotUploadedThumbnails(images.notUploaded);
-  // }, [images]);
-
-  // useEffect(() => {
-  //   setImages({
-  //     uploaded: thumbnails.uploaded || [],
-  //     notUploaded: thumbnails.notUploaded || [],
-  //   });
-  // }, [thumbnails]);
+  useEffect(() => {
+    return () => {
+      setNotUploadedThumbnails([]);
+      setUploadedThumbnails([]);
+    };
+  }, []);
 
   return (
     <section>

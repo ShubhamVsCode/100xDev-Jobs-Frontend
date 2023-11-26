@@ -76,6 +76,16 @@
   }
 }
 
+/* ::selection {
+  background-color: #ffcc00;
+  color: #000000;
+}
+
+::-moz-selection {
+  background-color: #ffcc00;
+  color: #000000;
+} */
+
 .bg-hero-background {
   background-image: url("../../public/background.png");
   background-repeat: no-repeat;
