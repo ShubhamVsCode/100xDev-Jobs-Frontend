@@ -183,3 +183,53 @@
     justify-self: center;
   }
 }
+
+/* Profile Head */
+.profile-head {
+  clip-path: path(
+    "M0 10C0 4.47715 4.47715 0 10 0H219.378C221.628 0 223.812 0.758688 225.577 2.15344L297.757 59.1804C302.922 63.2607 302.804 71.1312 297.52 75.0553L15.962 284.146C9.36382 289.046 0 284.337 0 276.118V88.8815V10Z"
+  );
+}
+
+/* Profile Body */
+/* .animated-stats {
+  animation: statAnimation 1500ms ease-in-out infinite;
+}
+
+@keyframes statAnimation {
+  0% {
+    outline-offset: 2px;
+  }
+  50% {
+    outline-offset: 6px;
+  }
+  100% {
+    outline-offset: 2px;
+  }
+} */
+
+/* @keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animated-stats {
+  position: relative;
+}
+
+.animated-stats::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  border: 2px dashed green;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: spin 60s linear infinite;
+} */

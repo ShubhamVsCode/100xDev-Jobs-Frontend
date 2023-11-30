@@ -1,13 +1,9 @@
 import PublicUserAPI from "@/api/public/user";
+import UserPublicProfile from "@/components/user-public-profile";
 
 const UsernamePage = async ({ params }: { params: { username: string } }) => {
   const user = await PublicUserAPI.getUserByUsername(params.username);
-
-  return (
-    <div>
-      <h1>{user.username}</h1>
-    </div>
-  );
+  return <UserPublicProfile userWithProfile={user} />;
 };
 
 export default UsernamePage;
